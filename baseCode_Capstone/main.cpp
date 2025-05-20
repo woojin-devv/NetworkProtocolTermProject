@@ -37,7 +37,7 @@ int main(void){
 
     pc.printf("endnode : %i, dest : %i\n", input_thisId, input_destId);
     
-    if (is_host_node(input_thisId, input_destId)) {
+    if (is_host_node(input_destId)) {
         pc.printf(":: 역할: HOST 입니다.\n");
         L3_quiz_showMenuToHost(pc);
     if (!L3_quiz_select(pc)) {

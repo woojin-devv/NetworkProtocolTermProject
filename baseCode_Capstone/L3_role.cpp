@@ -23,6 +23,11 @@ void clear_node_table(void) {
     valid_node_count = 0;
 }
 
-bool is_host_node(uint16_t thisId, uint16_t destId){
-    return thisId == destId;
+bool is_host_node(uint16_t destId) {
+    for (int i = 0; i < valid_node_count; i++) {
+        if (valid_node_ids[i] == destId) {
+            return true;
+        }
+    }
+    return false;
 }
