@@ -5,14 +5,18 @@
 #include "protocol_parameters.h"
 #include "mbed.h"
 
-
-//FSM state -------------------------------------------------
-#define L3STATE_IDLE                0
+#include "L3_state.h" //state 
 
 
-//state variables
-static uint8_t main_state = L3STATE_IDLE; //protocol state
-static uint8_t prev_state = main_state;
+// //FSM state -------------------------------------------------
+// #define L3STATE_IDLE 0
+
+
+// //state variables
+// static uint8_t main_state = L3STATE_IDLE; //protocol state
+// static uint8_t prev_state = main_state;
+L3_State l3_state = IDLE;   
+static L3_State prev_state = IDLE;
 
 //SDU (input)
 static uint8_t originalWord[1030];
@@ -63,16 +67,17 @@ void L3_initFSM(uint8_t destId)
 
 void L3_FSMrun(void)
 {   
-    if (prev_state != main_state)
+    if (prev_state != l3_state)
     {
-        debug_if(DBGMSG_L3, "[L3] State transition from %i to %i\n", prev_state, main_state);
-        prev_state = main_state;
+        debug_if(DBGMSG_L3, "[L3] State transition from %s to %s\n",
+             L3_stateToStr(prev_state), L3_stateToStr(l3_state));
+        prev_state = l3_state;
     }
 
     //FSM should be implemented here! ---->>>>
-    switch (main_state)
+    switch (l3_state)
     {
-        case L3STATE_IDLE: //IDLE state description
+        case IDLE: //IDLE state description
             
             if (L3_event_checkEventFlag(L3_event_msgRcvd)) //if data reception event happens
             {
