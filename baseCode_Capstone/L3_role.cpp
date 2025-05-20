@@ -1,6 +1,6 @@
 #include "L3_role.h"
 
-uint16_t valid_node_ids[MAX_NODE_COUNT] = {0}; //node 최소값 = 0, 최대값 = 65535
+uint16_t valid_node_ids[MAX_NODE_COUNT] = {0000}; //node 최소값 = 0, 최대값 = 65535
 uint8_t valid_node_count = 0;
 
 bool is_valid_node(uint16_t id) {
@@ -21,4 +21,8 @@ void register_node(uint16_t id) {
 
 void clear_node_table(void) {
     valid_node_count = 0;
+}
+
+bool is_host_node(uint16_t thisId, uint16_t destId){
+    return thisId == destId;
 }
