@@ -5,6 +5,7 @@
 
 #include "L3_role.h"
 #include "L3_Quiz.h"
+#include "L3_state.h"
 
 //serial port interface
 Serial pc(USBTX, USBRX);
@@ -20,6 +21,8 @@ int main(void){
 
     //initialization
     pc.printf("------------------ protocol stack starts! --------------------------\n");
+
+
         //source & destination ID setting
     pc.printf(":: ID for this node : ");
     pc.scanf("%hu", &input_thisId);
@@ -36,24 +39,26 @@ int main(void){
     register_node(input_thisId);  // 유효 노드 등록, Host의 destID는 존재하지 않음
 
     pc.printf("endnode : %i, dest : %i\n", input_thisId, input_destId);
-    pc.printf(":: 등록된 유효 노드 ID 목록:\n");
+    pc.printf(":: Registered ID List:\n");
 
     for (int i = 0; i < MAX_NODE_COUNT; i++) {
         pc.printf("  valid_node_ids[%d] = %d\n", i, valid_node_ids[i]);
     }
 
 
-    if (is_host_node(input_destId)) {
-        pc.printf(":: 역할: HOST 입니다.\n");
-        L3_quiz_showMenuToHost(pc);
-    if (!L3_quiz_select(pc)) {
-        return -1;
-    }
-        
+ // Host 역할
+     if (is_host_node(input_destId)) {
+        l3_state = WAIT_ANSWER;
     } else {
-        pc.printf(":: 역할: USER 입니다.\n");
+        l3_state = WAIT_QUIZ;
     }
 
+    // User 역할
+    else {
+        pc.printf(":: role: USER\n");
+        L3_quiz_showSelectedToUser(pc);         // Host가 선택한 퀴즈 보여주기
+        L3_quiz_receiveAnswerFromUser(pc);      // User의 답변 받고 채점
+    }
 
     //initialize lower layer stacks
     L2_initFSM(input_thisId);
