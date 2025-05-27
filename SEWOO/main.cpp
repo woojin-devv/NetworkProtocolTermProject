@@ -55,7 +55,7 @@ int main(void) {
 
     pc.printf("endnode : %d, dest : %d\n", input_thisId, input_destId);
 
-
+    // 1-5만 유효하다고 가정
     if (input_destId >= 1 && input_destId <= 5) {
         node_valid = 1;
     }
