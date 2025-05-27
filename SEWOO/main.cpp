@@ -60,10 +60,8 @@ int main(void) {
         node_valid = 1;
     }
 
-
-
     if (node_valid) {
-        // destination node가 지정된 숫자일 경우
+        // destination node가 1-5일 경우
 
         pc.printf("answer: ");
         pc.scanf("%s", user_answer);
