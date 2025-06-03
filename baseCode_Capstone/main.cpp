@@ -47,7 +47,7 @@ int main(void) {
 
     // 💡 attach 이후에 FSM 시작
     L2_initFSM(input_thisId);
-    L3_initFSM(input_destId);
+    L3_initFSM(input_thisId, input_destId);
 
     // IDLE 유도
     L3_FSMrun();

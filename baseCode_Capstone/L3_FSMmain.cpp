@@ -17,6 +17,7 @@ static uint8_t sdu[1030];
 
 static Serial pc(USBTX, USBRX);
 static uint8_t myDestId;
+static uint8_t myId;
 
 void L3service_processInputWord(void)
 {
@@ -37,8 +38,9 @@ void L3service_processInputWord(void)
     }
 }
 
-void L3_initFSM(uint8_t destId)
+void L3_initFSM(uint8_t thisId, uint8_t destId)
 {
+    myId = thisId;
     myDestId = destId;
     pc.attach(&L3service_processInputWord, Serial::RxIrq);
     pc.printf("Give a word to send : ");
@@ -61,6 +63,11 @@ void L3_FSMrun(void)
                 l3_state = TERMINATE;
                 break;
             }
+            // 퀴즈 전송
+            char quizIndexMsg[8];
+            sprintf(quizIndexMsg, "quiz%d", selected_quiz_index);
+            L3_LLI_dataReqFunc((uint8_t*)quizIndexMsg, strlen(quizIndexMsg) + 1, myDestId);
+            pc.printf("[L3] Quiz index %d sent to user.\n", selected_quiz_index);
             l3_state = CHAT_READY;
             break;
         }
@@ -121,6 +128,31 @@ void L3_FSMrun(void)
                 debug("RCVD MSG : %s (length:%i)\n", printBuf, size);
                 debug(" -------------------------------------------------\n");
 
+                if (strncmp((char*)dataPtr, "quiz", 4) == 0) {
+                    selected_quiz_index = dataPtr[4] - '0';
+                    if (selected_quiz_index >= 0 && selected_quiz_index < QUIZ_TOTAL_COUNT) {
+                        strncpy(selected_answer, quiz_answers[selected_quiz_index], MAX_PASSWORD_LEN);
+                        pc.printf("[Quiz Received] Index: %d\n", selected_quiz_index);
+                        l3_state = WAIT_QUIZ;
+                    } else {
+                        pc.printf("[Error] Invalid quiz index received.\n");
+                        l3_state = TERMINATE;
+                    }
+                    L3_event_clearEventFlag(L3_event_msgRcvd);
+                    return;
+                }
+
+                if (strncmp((char*)dataPtr, "join", 4) == 0 && myId < myDestId) {
+                    if (selected_quiz_index >= 0) {
+                        char quizIndexMsg[8];
+                        sprintf(quizIndexMsg, "quiz%d", selected_quiz_index);
+                        L3_LLI_dataReqFunc((uint8_t*)quizIndexMsg, strlen(quizIndexMsg) + 1, myDestId);
+                        pc.printf("[L3] Late joiner detected. Re-sending quiz index %d.\n", selected_quiz_index);
+                    }
+                    L3_event_clearEventFlag(L3_event_msgRcvd);
+                    return;
+                }
+
                 if (strncmp((char*)dataPtr, "quit", 4) == 0) {
                     pc.printf(":: 'quit' received from peer. Terminating chat...\n");
                     l3_state = TERMINATE;
@@ -137,6 +169,15 @@ void L3_FSMrun(void)
                     pc.printf(":: Chat terminated by user input.\n");
                     wordLen = 0;
                     memset(originalWord, 0, sizeof(originalWord));
+                    L3_event_clearEventFlag(L3_event_dataToSend);
+                    break;
+                }
+
+                if (strcmp((char*)originalWord, "join") == 0) {
+                    L3_LLI_dataReqFunc((uint8_t*)originalWord, strlen((char*)originalWord) + 1, myDestId);
+                    pc.printf("[You] join (for triggering quiz resend)\n");
+                    wordLen = 0;
+                    pc.printf("Give a word to send : ");
                     L3_event_clearEventFlag(L3_event_dataToSend);
                     break;
                 }
