@@ -23,5 +23,6 @@ bool L3_quiz_select(Serial& pc);
 void L3_quiz_showSelectedToUser(Serial& pc);
 void L3_quiz_receiveAnswerFromUser(Serial& pc);
 bool L3_quiz_checkAnswer(const char* user_input);
+bool L3_quiz_isAnswerCorrect(const char* userAnswer); 
 
 #endif

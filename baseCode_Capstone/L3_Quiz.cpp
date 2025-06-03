@@ -1,5 +1,6 @@
 #include "L3_Quiz.h"
 #include <string.h>
+#include "mbed.h" 
 
 //host에게 보여줄 QUIZ 목록록
 const char* quiz_questions[QUIZ_TOTAL_COUNT] = {
@@ -81,4 +82,15 @@ bool L3_quiz_checkAnswer(const char* user_input) {
     if (selected_quiz_index <= 0 || strlen(selected_answer) == 0) return false;
     return strcmp(user_input, selected_answer) == 0;
 
+}
+
+
+bool L3_quiz_isAnswerCorrect(const char* userInput) {
+    if (userInput == NULL || strlen(userInput) == 0) {
+        return false;
+    }
+
+    // 선택된 퀴즈의 정답 가져오기
+    const char* correctAnswer = quiz_answers[selected_quiz_index];
+    return strcmp(userInput, correctAnswer) == 0;
 }

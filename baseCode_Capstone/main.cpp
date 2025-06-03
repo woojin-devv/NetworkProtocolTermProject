@@ -6,6 +6,10 @@
 #include "L3_role.h"
 #include "L3_Quiz.h"
 #include "L3_state.h"
+#include "L3_2min_timer.h"
+
+extern int selected_quiz_index;
+extern char selected_answer[MAX_PASSWORD_LEN];
 
 
 //serial port interface
@@ -65,14 +69,58 @@ int main(void){
             l3_state = CHAT_READY;
             break;
 
-        case WAIT_QUIZ: // User
-            pc.printf(":: role: USER\n");
-            L3_quiz_showSelectedToUser(pc);
-            L3_quiz_receiveAnswerFromUser(pc);
-            break;
+            case WAIT_QUIZ: {
+                pc.printf(":: role: USER\n");
+
+                // 퀴즈 출력
+                L3_quiz_showSelectedToUser(pc);
+
+                // 2분 안에 최대 3회 입력
+                const int maxAttempts = 3;
+                Timer quizTimer;
+                quizTimer.start();
+
+                for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+                    float elapsed = quizTimer.read();
+                    float remaining = 120.0f - elapsed;
+
+                    if (remaining <= 0.0f) {
+                        pc.printf("[TIMEOUT] 2 minutes are over. Terminating.\n");
+                        l3_state = TERMINATE;
+                        break;
+                    }
+
+                    pc.printf("\n[Attempt %d/%d] Time left: %d seconds\n", attempt, maxAttempts, (int)remaining);
+                    pc.printf("Answer: ");
+
+                    char answerBuffer[MAX_PASSWORD_LEN] = {0};
+                    bool gotInput = getInputWithinTime(pc, answerBuffer, sizeof(answerBuffer), remaining);
+
+                    if (!gotInput) {
+                        pc.printf("Incorrect answer. (No input detected)\n");
+                        continue;
+                    }
+
+                    if (L3_quiz_isAnswerCorrect(answerBuffer)) {
+                        pc.printf("Correct! Moving to CHAT_READY state.\n");
+                        l3_state = CHAT_READY;
+                        break;
+                    } else {
+                        pc.printf("Incorrect answer.\n");
+                    }
+
+                    if (attempt == maxAttempts) {
+                        pc.printf("You've used all attempts. Terminating session.\n");
+                        l3_state = TERMINATE;
+                    }
+                }
+                break;
+            }
+
 
         case CHAT_READY: // Host & User 공통 진입
             pc.printf(":: state: CHAT_READY\n");
+            pc.printf("[DEBUG] Initial L3 state: %s\n", L3_stateToStr(l3_state));
             if (is_host_node(input_destId)) {
                 pc.printf("-> [CHAT MODE] Host is ready to chat\n");
                 // Host 전용 채팅 준비 로직 (예: 입력 대기 등)
@@ -81,7 +129,7 @@ int main(void){
                 // User 전용 채팅 준비 로직
             }
             break;
-            
+
         case TERMINATE:
             pc.printf(":: Terminating...\n");
             break;
@@ -95,6 +143,9 @@ int main(void){
     //initialize lower layer stacks
     L2_initFSM(input_thisId);
     L3_initFSM(input_destId);
+
+    // FSM을 1번 강제 실행해서 IDLE 진입 유도
+    L3_FSMrun();
     
     while(1)
     {
