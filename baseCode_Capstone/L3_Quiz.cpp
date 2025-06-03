@@ -2,6 +2,10 @@
 #include <string.h>
 #include "mbed.h" 
 
+
+// L3_Quiz.cpp 상단에 추가
+extern void L3service_processInputWord(void);
+
 //host에게 보여줄 QUIZ 목록록
 const char* quiz_questions[QUIZ_TOTAL_COUNT] = {
     "1. What's host's favorite fruit? [banana]",
@@ -61,11 +65,33 @@ void L3_quiz_receiveAnswerFromUser(Serial& pc) {
 
 
 bool L3_quiz_select(Serial& pc) {
-    int quiz_choice = 0;
-    pc.printf(":: Please select a quiz number (1 ~ %d): ", QUIZ_TOTAL_COUNT);
-    pc.scanf("%d", &quiz_choice);
-    pc.getc();
+    char inputBuffer[16] = {0};
 
+    // 인터럽트 detach
+    pc.attach(NULL, Serial::RxIrq);
+
+    pc.printf(":: Please select a quiz number (1 ~ %d): ", QUIZ_TOTAL_COUNT);
+
+    size_t idx = 0;  // idx를 size_t로
+    while (1) {
+        char c = pc.getc();
+        if (c == '\r' || c == '\n') {
+            inputBuffer[idx] = '\0';
+            break;
+        }
+        if (idx < sizeof(inputBuffer) - 1) {
+            inputBuffer[idx++] = c;
+            pc.putc(c);
+        }
+    }
+
+
+    pc.printf("\n:: You entered: %s\n", inputBuffer);
+
+    //다시 attach
+    pc.attach(&L3service_processInputWord, Serial::RxIrq);
+
+    int quiz_choice = atoi(inputBuffer);
     if (quiz_choice < 1 || quiz_choice > QUIZ_TOTAL_COUNT) {
         pc.printf("[Error] Invalid quiz number selected.\n");
         return false;
@@ -73,9 +99,11 @@ bool L3_quiz_select(Serial& pc) {
 
     selected_quiz_index = quiz_choice - 1;
     strncpy(selected_answer, quiz_answers[selected_quiz_index], MAX_PASSWORD_LEN);
-    pc.printf(":: Selected quiz number: %s\n", quiz_questions[selected_quiz_index]);
+    pc.printf(":: Selected quiz: %s\n", quiz_questions[selected_quiz_index]);
     return true;
 }
+
+
 
 bool L3_quiz_checkAnswer(const char* user_input) {
 

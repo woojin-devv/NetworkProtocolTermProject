@@ -18,7 +18,7 @@ static uint8_t sdu[1030];
 static Serial pc(USBTX, USBRX);
 static uint8_t myDestId;
 
-static void L3service_processInputWord(void)
+void L3service_processInputWord(void)
 {
     char c = pc.getc();
     if (!L3_event_checkEventFlag(L3_event_dataToSend)) {

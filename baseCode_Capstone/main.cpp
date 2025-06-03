@@ -11,14 +11,18 @@ Serial pc(USBTX, USBRX);
 uint16_t input_thisId = 1;
 uint16_t input_destId = 0;
 
+//scanf() 이후에만 attach 
+
 int main(void) {
     pc.printf("------------------ protocol stack starts! --------------------------\n");
 
-    // ID 설정
+    // ID 입력 (attach 전에 반드시 수행)
     pc.printf(":: ID for this node : ");
     pc.scanf("%hu", &input_thisId);
+
     pc.printf(":: ID for the destination : ");
     pc.scanf("%hu", &input_destId);
+
     pc.getc();  // '\n' 제거
 
     if (input_thisId == input_destId) {
@@ -41,14 +45,13 @@ int main(void) {
         l3_state = WAIT_QUIZ;   // User
     }
 
-    // L2, L3 계층 초기화
+    // 💡 attach 이후에 FSM 시작
     L2_initFSM(input_thisId);
     L3_initFSM(input_destId);
 
     // IDLE 유도
     L3_FSMrun();
 
-    // FSM 반복
     while (1) {
         L2_FSMrun();
         L3_FSMrun();
