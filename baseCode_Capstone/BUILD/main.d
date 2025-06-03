@@ -139,5 +139,4 @@ main.o: ../main.cpp ../mbed_config.h ../mbed.h \
  ../mbed/platform/FileSystemHandle.h ../mbed/platform/DirHandle.h \
  ../mbed/platform/CriticalSectionLock.h ../mbed/platform/DeepSleepLock.h \
  ../mbed/platform/mbed_stats.h ../mbed/platform/ScopedLock.h \
- ../L2_FSMmain.h ../L3_FSMmain.h ../L3_role.h ../L3_Quiz.h ../L3_state.h \
- ../L3_2min_timer.h
+ ../L2_FSMmain.h ../L3_FSMmain.h ../L3_role.h ../L3_state.h
