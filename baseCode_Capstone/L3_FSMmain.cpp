@@ -77,6 +77,61 @@ void L3_FSMrun(void)
     //FSM should be implemented here! ---->>>>
     switch (l3_state)
     {
+        case WAIT_ANSWER:
+    pc.printf(":: role: HOST\n");
+    L3_quiz_showMenuToHost(pc);
+    if (!L3_quiz_select(pc)) {
+        pc.printf("[ERROR] Quiz selection failed. Terminating.\n");
+        l3_state = TERMINATE;
+        break;
+    }
+    l3_state = CHAT_READY;
+    break;
+
+    case WAIT_QUIZ:
+        pc.printf(":: role: USER\n");
+        L3_quiz_showSelectedToUser(pc);
+
+        const int maxAttempts = 3;
+        Timer quizTimer;
+        quizTimer.start();
+
+        for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+            float elapsed = quizTimer.read();
+            float remaining = 120.0f - elapsed;
+
+            if (remaining <= 0.0f) {
+                pc.printf("[TIMEOUT] 2 minutes are over. Terminating.\n");
+                l3_state = TERMINATE;
+                break;
+            }
+
+            pc.printf("\n[Attempt %d/%d] Time left: %d seconds\n", attempt, maxAttempts, (int)remaining);
+            pc.printf("Answer: ");
+
+            char answerBuffer[MAX_PASSWORD_LEN] = {0};
+            bool gotInput = getInputWithinTime(pc, answerBuffer, sizeof(answerBuffer), remaining);
+
+            if (!gotInput) {
+                pc.printf("Incorrect answer. (No input detected)\n");
+                continue;
+            }
+
+            if (L3_quiz_isAnswerCorrect(answerBuffer)) {
+                pc.printf("Correct! Moving to CHAT_READY state.\n");
+                l3_state = CHAT_READY;
+                break;
+            } else {
+                pc.printf("Incorrect answer.\n");
+            }
+
+            if (attempt == maxAttempts) {
+                pc.printf("You've used all attempts. Terminating session.\n");
+                l3_state = TERMINATE;
+            }
+        }
+        break;
+
         case IDLE: //IDLE state description
             
             if (L3_event_checkEventFlag(L3_event_msgRcvd)) //if data reception event happens
