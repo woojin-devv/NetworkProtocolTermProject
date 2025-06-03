@@ -87,13 +87,28 @@ void L3_FSMrun(void)
 
                 debug("\n -------------------------------------------------\nRCVD MSG : %s (length:%i)\n -------------------------------------------------\n", 
                             dataPtr, size);
-                
+                if (strncmp((char*)dataPtr, "quit", 4) == 0) {
+                    pc.printf(":: 'quit' received from peer. Terminating chat...\n");
+                    l3_state = TERMINATE;
+                    L3_event_clearEventFlag(L3_event_msgRcvd);
+                    return;  // TERMINATE 상태로 넘어가기
+                }
                 pc.printf("Give a word to send : ");
                 
                 L3_event_clearEventFlag(L3_event_msgRcvd);
             }
             else if (L3_event_checkEventFlag(L3_event_dataToSend)) //if data needs to be sent (keyboard input)
             {
+                 if (strcmp((char*)originalWord, "quit") == 0) {
+                    l3_state = TERMINATE;
+                    pc.printf(":: Chat terminated by user input.\n");
+
+                    // 초기화
+                    wordLen = 0;
+                    memset(originalWord, 0, sizeof(originalWord));
+                    L3_event_clearEventFlag(L3_event_dataToSend);
+                    break;
+                }
                 //msg header setting
                 strcpy((char*)sdu, (char*)originalWord);
                 debug("[L3] msg length : %i\n", wordLen);
@@ -106,6 +121,22 @@ void L3_FSMrun(void)
 
                 L3_event_clearEventFlag(L3_event_dataToSend);
             }
+            break;
+
+        case CHAT_READY:
+            pc.printf(":: [L3] Entering CHAT_READY...\n");
+            l3_state = IDLE; // 메시지 송수신 처리를 위해 IDLE로 전이
+            break;
+
+        case TERMINATE:
+            pc.printf(":: [L3] Entering TERMINATE. Chat session ended.\n");
+
+             // 이벤트 플래그 전부 초기화
+            L3_event_clearAllEventFlags();
+
+            // 인터럽트 제거 (더 이상 사용자 입력 X)
+            pc.attach(NULL);
+            while (1);  // 무한 루프 대기
             break;
 
         default :
