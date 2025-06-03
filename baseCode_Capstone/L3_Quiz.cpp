@@ -1,22 +1,22 @@
 #include "L3_Quiz.h"
 #include <string.h>
 
-const char* quiz_questions[QUIZ_COUNT] = {
-    "", // index 0 dummy
+//host에게 보여줄 QUIZ 목록록
+const char* quiz_questions[QUIZ_TOTAL_COUNT] = {
     "1. What's host's favorite fruit? [banana]",
     "2. How old is the Host? [25]",
     "3. Is Host a student in Sookmyung women's university? [yes]"
 };
 
-const char* quiz_questions_for_user[QUIZ_COUNT] = {
-    "", // index 0 dummy
+//USER에게 보여줄 QUIZ 목록록
+const char* quiz_questions_for_user[QUIZ_TOTAL_COUNT] = {
     "What's host's favorite fruit?",
     "How old is the Host?",
     "Is Host a student in Sookmyung women's university?"
 };
 
-const char* quiz_answers[QUIZ_COUNT] = {
-    "",     // index 0 dummy
+//퀴즈 정답 
+const char* quiz_answers[QUIZ_TOTAL_COUNT] = {
     "banana",
     "25",
     "yes"
@@ -27,14 +27,14 @@ char selected_answer[MAX_PASSWORD_LEN] = {0};
 
 void L3_quiz_showMenuToHost(Serial& pc) {
     pc.printf("\n======================== Quiz List ========================\n");
-    for (int i = 0; i < QUIZ_COUNT; i++) {
+    for (int i = 0; i < QUIZ_TOTAL_COUNT; i++) {
         pc.printf("%s\n", quiz_questions[i]);
     }
     pc.printf("===========================================================\n");
 }
 
 void L3_quiz_showSelectedToUser(Serial& pc) {
-    if (selected_quiz_index <= 0 || selected_quiz_index >= QUIZ_COUNT) {
+    if (selected_quiz_index <= 0 || selected_quiz_index >= QUIZ_TOTAL_COUNT) {
         pc.printf("[Error] No valid quiz has been selected.\n");
         return;
     }
@@ -59,14 +59,13 @@ void L3_quiz_receiveAnswerFromUser(Serial& pc) {
 }
 
 
-
 bool L3_quiz_select(Serial& pc) {
     int quiz_choice = 0;
-    pc.printf(":: Please select a quiz number (1 ~ %d): ", QUIZ_COUNT);
+    pc.printf(":: Please select a quiz number (1 ~ %d): ", QUIZ_TOTAL_COUNT);
     pc.scanf("%d", &quiz_choice);
     pc.getc();
 
-    if (quiz_choice < 1 || quiz_choice > QUIZ_COUNT) {
+    if (quiz_choice < 1 || quiz_choice > QUIZ_TOTAL_COUNT) {
         pc.printf("[Error] Invalid quiz number selected.\n");
         return false;
     }

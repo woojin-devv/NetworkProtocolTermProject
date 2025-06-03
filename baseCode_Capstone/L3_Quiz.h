@@ -5,7 +5,6 @@
 
 #define MAX_PASSWORD_LEN 20
 #define QUIZ_TOTAL_COUNT 4  // index 0 is dummy
-#define QUIZ_COUNT 3        // usable quiz count
 
 // Arrays with dummy at index 0
 extern const char* quiz_questions[QUIZ_TOTAL_COUNT];
