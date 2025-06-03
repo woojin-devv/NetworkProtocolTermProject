@@ -39,7 +39,7 @@ void L3_quiz_showMenuToHost(Serial& pc) {
 }
 
 void L3_quiz_showSelectedToUser(Serial& pc) {
-    if (selected_quiz_index <= 0 || selected_quiz_index >= QUIZ_TOTAL_COUNT) {
+    if (selected_quiz_index < 0 || selected_quiz_index >= QUIZ_TOTAL_COUNT) {
         pc.printf("[Error] No valid quiz has been selected.\n");
         return;
     }
@@ -70,7 +70,7 @@ bool L3_quiz_select(Serial& pc) {
     // 인터럽트 detach
     pc.attach(NULL, Serial::RxIrq);
 
-    pc.printf(":: Please select a quiz number (1 ~ %d): ", QUIZ_TOTAL_COUNT);
+    pc.printf(":: Please select a quiz number (1 ~ %d) or enter 'U' to join as USER: ", QUIZ_TOTAL_COUNT);
 
     size_t idx = 0;  // idx를 size_t로
     while (1) {
@@ -82,6 +82,13 @@ bool L3_quiz_select(Serial& pc) {
         if (idx < sizeof(inputBuffer) - 1) {
             inputBuffer[idx++] = c;
             pc.putc(c);
+        }
+        // 기존 코드 내부 while 루프 끝난 후 추가
+        if (strcasecmp(inputBuffer, "u") == 0) {
+            pc.printf(":: Joining as USER. Sending 'join' message...\n");
+            strcpy(selected_answer, ""); // 초기화
+            selected_quiz_index = -1;    // 초기화
+            return false;  // 혹은 특정 플래그 리턴하도록 설계
         }
     }
 
@@ -106,11 +113,10 @@ bool L3_quiz_select(Serial& pc) {
 
 
 bool L3_quiz_checkAnswer(const char* user_input) {
-
-    if (selected_quiz_index <= 0 || strlen(selected_answer) == 0) return false;
+    if (selected_quiz_index < 0 || strlen(selected_answer) == 0) return false;
     return strcmp(user_input, selected_answer) == 0;
-
 }
+
 
 
 bool L3_quiz_isAnswerCorrect(const char* userInput) {
