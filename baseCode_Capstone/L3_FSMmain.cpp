@@ -58,12 +58,24 @@ void L3_FSMrun(void)
         case WAIT_ANSWER: {
             pc.printf(":: role: HOST\n");
             L3_quiz_showMenuToHost(pc);
-            if (!L3_quiz_select(pc)) {
+            QuizSelectResult result = L3_quiz_select(pc);
+
+            if (result == QUIZ_SELECTION_FAILED) {
                 pc.printf("[ERROR] Quiz selection failed. Terminating.\n");
                 l3_state = TERMINATE;
                 break;
             }
-            // 퀴즈 전송
+
+            if (result == QUIZ_JOIN_AS_USER) {
+                const char* joinMsg = "join";
+                L3_LLI_dataReqFunc((uint8_t*)joinMsg, strlen(joinMsg) + 1, myDestId);
+                pc.printf("[You] join (sent)\n");
+                pc.printf(":: Switching to IDLE state.\n");
+                l3_state = IDLE;
+                break;
+            }
+
+            // 정상 퀴즈 선택
             char quizIndexMsg[8];
             sprintf(quizIndexMsg, "quiz%d", selected_quiz_index);
             L3_LLI_dataReqFunc((uint8_t*)quizIndexMsg, strlen(quizIndexMsg) + 1, myDestId);
@@ -71,6 +83,7 @@ void L3_FSMrun(void)
             l3_state = CHAT_READY;
             break;
         }
+
         case WAIT_QUIZ: {
             pc.printf(":: role: USER\n");
             L3_quiz_showSelectedToUser(pc);

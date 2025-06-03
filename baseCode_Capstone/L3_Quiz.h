@@ -17,12 +17,20 @@ extern char selected_answer[MAX_PASSWORD_LEN];
 
 // Host functions
 void L3_quiz_showMenuToHost(Serial& pc);
-bool L3_quiz_select(Serial& pc);
 
 // User functions
 void L3_quiz_showSelectedToUser(Serial& pc);
 void L3_quiz_receiveAnswerFromUser(Serial& pc);
 bool L3_quiz_checkAnswer(const char* user_input);
 bool L3_quiz_isAnswerCorrect(const char* userAnswer); 
+
+typedef enum {
+    QUIZ_SELECTED,
+    QUIZ_JOIN_AS_USER,
+    QUIZ_SELECTION_FAILED
+} QuizSelectResult;
+
+QuizSelectResult L3_quiz_select(Serial& pc);
+
 
 #endif

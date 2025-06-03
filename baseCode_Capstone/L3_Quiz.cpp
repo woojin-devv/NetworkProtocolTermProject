@@ -63,16 +63,14 @@ void L3_quiz_receiveAnswerFromUser(Serial& pc) {
     }
 }
 
-
-bool L3_quiz_select(Serial& pc) {
+QuizSelectResult L3_quiz_select(Serial& pc) {
     char inputBuffer[16] = {0};
 
-    // 인터럽트 detach
     pc.attach(NULL, Serial::RxIrq);
 
     pc.printf(":: Please select a quiz number (1 ~ %d) or enter 'U' to join as USER: ", QUIZ_TOTAL_COUNT);
 
-    size_t idx = 0;  // idx를 size_t로
+    size_t idx = 0;
     while (1) {
         char c = pc.getc();
         if (c == '\r' || c == '\n') {
@@ -83,31 +81,27 @@ bool L3_quiz_select(Serial& pc) {
             inputBuffer[idx++] = c;
             pc.putc(c);
         }
-        // 기존 코드 내부 while 루프 끝난 후 추가
-        if (strcasecmp(inputBuffer, "u") == 0) {
-            pc.printf(":: Joining as USER. Sending 'join' message...\n");
-            strcpy(selected_answer, ""); // 초기화
-            selected_quiz_index = -1;    // 초기화
-            return false;  // 혹은 특정 플래그 리턴하도록 설계
-        }
     }
 
-
     pc.printf("\n:: You entered: %s\n", inputBuffer);
-
-    //다시 attach
     pc.attach(&L3service_processInputWord, Serial::RxIrq);
+
+    
+    if (strcasecmp(inputBuffer, "u") == 0) {
+        pc.printf(":: Joining as USER. Sending 'join' message...\n");
+        return QUIZ_JOIN_AS_USER;
+    }
 
     int quiz_choice = atoi(inputBuffer);
     if (quiz_choice < 1 || quiz_choice > QUIZ_TOTAL_COUNT) {
         pc.printf("[Error] Invalid quiz number selected.\n");
-        return false;
+        return QUIZ_SELECTION_FAILED;
     }
 
     selected_quiz_index = quiz_choice - 1;
     strncpy(selected_answer, quiz_answers[selected_quiz_index], MAX_PASSWORD_LEN);
     pc.printf(":: Selected quiz: %s\n", quiz_questions[selected_quiz_index]);
-    return true;
+    return QUIZ_SELECTED;
 }
 
 
