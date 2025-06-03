@@ -1,4 +1,5 @@
 #include "L3_role.h"
+#include "mbed.h" 
 
 uint16_t valid_node_ids[MAX_NODE_COUNT] = {0000}; //node 최소값 = 0, 최대값 = 65535
 uint8_t valid_node_count = 0;

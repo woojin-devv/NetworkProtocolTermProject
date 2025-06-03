@@ -59,6 +59,7 @@ OBJECTS += L3_LLinterface.o
 OBJECTS += L3_timer.o
 OBJECTS += L3_role.o
 OBJECTS += L3_Quiz.o
+OBJECTS += L3_2min_timer.o
 
  SYS_OBJECTS += lib/Rx_HAL.o
  SYS_OBJECTS += lib/Rx_HHI.o

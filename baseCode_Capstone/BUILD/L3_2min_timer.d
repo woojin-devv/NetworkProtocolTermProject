@@ -1,7 +1,7 @@
-main.o: ../main.cpp ../mbed_config.h ../mbed.h \
- ../mbed/platform/mbed_version.h ../mbed/platform/mbed_toolchain.h \
- ../mbed/platform/mbed_preprocessor.h ../mbed/platform/platform.h \
- ../mbed/platform/mbed_retarget.h \
+L3_2min_timer.o: ../L3_2min_timer.cpp ../mbed_config.h ../L3_2min_timer.h \
+ ../mbed.h ../mbed/platform/mbed_version.h \
+ ../mbed/platform/mbed_toolchain.h ../mbed/platform/mbed_preprocessor.h \
+ ../mbed/platform/platform.h ../mbed/platform/mbed_retarget.h \
  ../mbed/TARGET_NUCLEO_F446RE/TARGET_STM/TARGET_STM32F4/device.h \
  ../mbed/TARGET_NUCLEO_F446RE/TARGET_STM/TARGET_STM32F4/TARGET_STM32F446xE/objects.h \
  ../mbed/TARGET_NUCLEO_F446RE/TARGET_STM/TARGET_STM32F4/TARGET_STM32F446xE/device/cmsis.h \
@@ -138,6 +138,4 @@ main.o: ../main.cpp ../mbed_config.h ../mbed.h \
  ../mbed/platform/ATCmdParser.h ../mbed.h \
  ../mbed/platform/FileSystemHandle.h ../mbed/platform/DirHandle.h \
  ../mbed/platform/CriticalSectionLock.h ../mbed/platform/DeepSleepLock.h \
- ../mbed/platform/mbed_stats.h ../mbed/platform/ScopedLock.h \
- ../L2_FSMmain.h ../L3_FSMmain.h ../L3_role.h ../L3_Quiz.h ../L3_state.h \
- ../L3_2min_timer.h
+ ../mbed/platform/mbed_stats.h ../mbed/platform/ScopedLock.h

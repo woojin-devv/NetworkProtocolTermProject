@@ -85,8 +85,16 @@ void L3_FSMrun(void)
                 uint8_t* dataPtr = L3_LLI_getMsgPtr();
                 uint8_t size = L3_LLI_getSize();
 
-                debug("\n -------------------------------------------------\nRCVD MSG : %s (length:%i)\n -------------------------------------------------\n", 
-                            dataPtr, size);
+                
+                // 버퍼에 복사 후 널 종료 추가
+                char printBuf[1030] = {0};
+                memcpy(printBuf, dataPtr, size);
+                printBuf[size] = '\0'; // 문자열 종료
+
+                debug("\n -------------------------------------------------\n");
+                debug("RCVD MSG : %s (length:%i)\n", printBuf, size);
+                debug(" -------------------------------------------------\n");
+                           
                 if (strncmp((char*)dataPtr, "quit", 4) == 0) {
                     pc.printf(":: 'quit' received from peer. Terminating chat...\n");
                     l3_state = TERMINATE;
@@ -113,6 +121,10 @@ void L3_FSMrun(void)
                 strcpy((char*)sdu, (char*)originalWord);
                 debug("[L3] msg length : %i\n", wordLen);
                 L3_LLI_dataReqFunc(sdu, wordLen, myDestId);
+                
+                //송신 메시지 출력
+                pc.printf("[You] %s\n", sdu);
+
 
                 debug_if(DBGMSG_L3, "[L3] sending msg....\n");
                 wordLen = 0;
@@ -132,7 +144,7 @@ void L3_FSMrun(void)
             pc.printf(":: [L3] Entering TERMINATE. Chat session ended.\n");
 
              // 이벤트 플래그 전부 초기화
-            L3_event_clearAllEventFlags();
+            L3_event_clearAllEventFlag();
 
             // 인터럽트 제거 (더 이상 사용자 입력 X)
             pc.attach(NULL);
