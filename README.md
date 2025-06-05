@@ -27,15 +27,29 @@ NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 
 make
 ```
 
-### 2. 바이너리 복사 스크립트 (Windows Cygwin 환경 기준)
+### 2. 경로 수정
+```bash
+vi cp2.sh
+```
+```bash
+cp ./BUILD/myProtocol.bin /Volumes/NOD_F446RE
+esc
+:wq
+```
+### 3. 실행 권한 부여
+```bash
+chmod777 cp2.sh
+```
+
+### 4. 바이너리 복사 스크립트 (Mac 환경 기준)
 
 ```bash
 make clean
 make
-cp ./BUILD/myProtocol.bin /cygdrive/d/
+cp ./BUILD/myProtocol.bin /Volumes/NOD_F446RE
 ```
 
-### 3. 자동 복사 스크립트 실행
+### 5. 자동 복사 스크립트 실행
 ```
 ./cp2.sh
 ```
