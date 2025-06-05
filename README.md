@@ -31,25 +31,22 @@ make
 ```bash
 vi cp2.sh
 ```
+
+### 3. 바이너리 복사 스크립트 (Mac 환경 기준)
 ```bash
+make clean
+make
 cp ./BUILD/myProtocol.bin /Volumes/NOD_F446RE
 esc
 :wq
 ```
+
 ### 3. 실행 권한 부여
 ```bash
 chmod777 cp2.sh
 ```
 
-### 4. 바이너리 복사 스크립트 (Mac 환경 기준)
-
-```bash
-make clean
-make
-cp ./BUILD/myProtocol.bin /Volumes/NOD_F446RE
-```
-
 ### 5. 자동 복사 스크립트 실행
-```
+```bash
 ./cp2.sh
 ```
