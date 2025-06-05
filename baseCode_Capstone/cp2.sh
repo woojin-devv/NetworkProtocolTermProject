@@ -3,4 +3,4 @@
 
 make clean
 make
-cp ./BUILD/myProtocol.bin /cygdrive/d/
+cp ./BUILD/myProtocol.bin /Volumes/NOD_F446RE
