@@ -4,7 +4,7 @@
 #include "mbed.h"
 
 #define MAX_PASSWORD_LEN 20
-#define QUIZ_TOTAL_COUNT 3  
+#define QUIZ_TOTAL_COUNT 5  
 
 // Arrays with dummy at index 0
 extern const char* quiz_questions[QUIZ_TOTAL_COUNT];
@@ -19,7 +19,6 @@ extern char selected_answer[MAX_PASSWORD_LEN];
 void L3_quiz_showMenuToHost(Serial& pc);
 
 // User functions
-void L3_quiz_showSelectedToUser(Serial& pc);
 void L3_quiz_receiveAnswerFromUser(Serial& pc);
 bool L3_quiz_checkAnswer(const char* user_input);
 bool L3_quiz_isAnswerCorrect(const char* userAnswer); 

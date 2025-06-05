@@ -33,10 +33,12 @@ int main(void) {
     register_node(input_thisId);
 
     pc.printf("endnode : %i, dest : %i\n", input_thisId, input_destId);
-    pc.printf(":: Registered ID List:\n");
-    for (int i = 0; i < MAX_NODE_COUNT; i++) {
-        pc.printf("  valid_node_ids[%d] = %d\n", i, valid_node_ids[i]);
-    }
+
+    //디버깅용 - 등록된 아이디 확인
+    // pc.printf(":: Registered ID List:\n");
+    // for (int i = 0; i < MAX_NODE_COUNT; i++) {
+    //     pc.printf("  valid_node_ids[%d] = %d\n", i, valid_node_ids[i]);
+    // }
 
     // 역할 기반 초기 상태 설정
     if (is_host_node(input_destId)) {
@@ -45,7 +47,7 @@ int main(void) {
         l3_state = WAIT_QUIZ;   // User
     }
 
-    // 💡 attach 이후에 FSM 시작
+    // attach 이후에 FSM 시작
     L2_initFSM(input_thisId);
     L3_initFSM(input_thisId, input_destId);
 
