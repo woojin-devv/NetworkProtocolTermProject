@@ -31,16 +31,6 @@ NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 
 
 ### 🔹 Host FSM
 
-```mermaid
-stateDiagram-v2
-    IDLE --> WAIT_USER_NODE : PDU (node input)
-    WAIT_USER_NODE --> WAIT_ANSWER : PDU (quiz)
-    WAIT_ANSWER --> CHAT_READY : 정답
-    WAIT_ANSWER --> TERMINATE : 오답 or 타임아웃
-    CHAT_READY --> END
-    TERMINATE --> END
-```
-
 | 상태 | 입력 (이벤트) | 동작 | 다음 상태 |
 |------|----------------|------|------------|
 | `IDLE` | node 값 입력 | 노드 값 확인 | `WAIT_ANSWER` 또는 `WAIT_QUIZ` |
@@ -52,15 +42,6 @@ stateDiagram-v2
 
 ### 🔹 User FSM
 
-```mermaid
-stateDiagram-v2
-    SEND_NODE --> WAIT_QUIZ : ACK(Node_Valid)
-    WAIT_QUIZ --> SEND_ANSWER : PDU (quiz 수신)
-    SEND_ANSWER --> CHAT_READY : 정답
-    SEND_ANSWER --> TERMINATE : 3회 실패
-    CHAT_READY --> END
-```
-
 | 상태 | 입력 (이벤트) | 동작 | 다음 상태 |
 |------|----------------|------|------------|
 | `SEND_NODE` | 노드 값 입력 | Host로 전송 | `WAIT_QUIZ` |
@@ -69,6 +50,7 @@ stateDiagram-v2
 | `CHAT_READY` | - | 채팅 가능 상태 | `END` |
 
 ---
+<img width="284" alt="image" src="https://github.com/user-attachments/assets/ceeed877-d6ea-458c-9b2b-1df8bd75a2d6" />
 
 ## 🛠 사용 기술
 - **언어**: C++
