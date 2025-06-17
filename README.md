@@ -29,6 +29,8 @@ NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 
 
 ## 🧩 상태 전이 구조
 
+<img src="https://github.com/user-attachments/assets/ceeed877-d6ea-458c-9b2b-1df8bd75a2d6" style="max-width: 100%; height: auto;" />
+
 ### 🔹 Host FSM
 
 | 상태 | 입력 (이벤트) | 동작 | 다음 상태 |
@@ -50,7 +52,6 @@ NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 
 | `CHAT_READY` | - | 채팅 가능 상태 | `END` |
 
 ---
-<img width="284" alt="image" src="https://github.com/user-attachments/assets/ceeed877-d6ea-458c-9b2b-1df8bd75a2d6" />
 
 ## 🛠 사용 기술
 - **언어**: C++
