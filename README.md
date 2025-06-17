@@ -90,7 +90,7 @@ NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 
 
 
 ## ▶ 시연 영상
-> [📺 시뮬레이션 결과 영상 보기](https://youtu.be/9sQsU2FJ0Lw?si=EXIZ3rdM1I2ljWdQ))
+> [📺 시연 영상](https://youtu.be/9sQsU2FJ0Lw?si=EXIZ3rdM1I2ljWdQ))
 
 
 
