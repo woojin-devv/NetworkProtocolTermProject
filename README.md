@@ -25,11 +25,16 @@ NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 
 ## 📌 프로젝트 개요
 본 프로젝트는 사용자 인증 및 퀴즈 기반 상호작용을 중심으로 한 **네트워크 프로토콜 설계 채팅 시스템**입니다. `Host`와 `User` 간의 통신을 FSM(Finite State Machine)으로 구성하여, 상태 기반 동작 흐름을 구현하였습니다.
 
+
+
 ---
+
+
 
 ## 🧩 상태 전이 구조
 
 <img src="https://github.com/user-attachments/assets/ceeed877-d6ea-458c-9b2b-1df8bd75a2d6" style="max-width: 100%; height: auto;" />
+
 
 ### 🔹 Host FSM
 
@@ -40,7 +45,9 @@ NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 
 | `CHAT_READY` | - | 채팅 가능 상태 | `END` |
 | `TERMINATE` | - | 종료 처리 | `END` |
 
+
 ---
+
 
 ### 🔹 User FSM
 
@@ -51,7 +58,11 @@ NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 
 | `SEND_ANSWER` | 사용자 입력 → 전송 | 정답 여부 판단 | `CHAT_READY` 또는 `TERMINATE` |
 | `CHAT_READY` | - | 채팅 가능 상태 | `END` |
 
+
+
 ---
+
+
 
 ## 🛠 사용 기술
 - **언어**: C++
@@ -60,7 +71,11 @@ NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 
 - **통신**: 시리얼 기반  
 - **설계 방식**: FSM 기반 네트워크 프로토콜 흐름 구현
 
+
+
 ---
+
+
 
 ## 💡 주요 설계 포인트
 - FSM을 기반으로 송수신 흐름 제어
@@ -69,24 +84,21 @@ NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 
 - 정답 검증 및 오류 처리 (타임아웃, 횟수 제한 등)
 - 성공 시 채팅 가능, 실패 시 종료 처리
 
+
+
 ---
+
+
 
 ## ▶ 시연 영상
 > [📺 시뮬레이션 결과 영상 보기](https://youtu.be/9sQsU2FJ0Lw?si=EXIZ3rdM1I2ljWdQ))
 
----
 
-## 📁 프로젝트 구조
 
-```
-├── L3_state.h            # 상태 정의 및 상태 이름 변환 함수
-├── L3_FSMmain.cpp        # 상태 전이 메인 로직
-├── L3_role.cpp           # 사용자 인증 및 역할 등록/검증
-├── L3_quiz.cpp           # 퀴즈 전송 및 정답 처리
-├── main.cpp              # 시리얼 초기화 및 FSM 실행 진입점
-```
 
 ---
+
+
 
 ## ✨ 얻은 점
 - FSM 및 네트워크 흐름 설계 능력 향상
