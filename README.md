@@ -1,11 +1,11 @@
-# NetworkProtocolTermProject
+# 📡 NetworkProtocolTermProject
 
 STM32 기반 네트워크 프로토콜 텀 프로젝트 저장소입니다.  
 NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 구현합니다.
 
 ---
 
-## 사용 보드: STM32 Nucleo-F446RE
+## 🔶 사용 보드: STM32 Nucleo-F446RE
 ![NUCLEO-F446RE 보드](https://www.bdtronics.com/pub/media/catalog/product/s/t/stm32-nucleo-f446re-stm32f446ret6-development-board.jpg)
 
 | 항목            | 설명                                                                 |
