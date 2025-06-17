@@ -97,6 +97,34 @@ NUCLEO-F446RE 보드를 사용하여 Layer 2 및 Layer 3 프로토콜 스택을 
 
 ---
 
+## 📁 프로젝트 디렉토리 구조
+
+```
+NetworkProtocolTermProject-master/
+├── main.cpp
+├── L3_2min_timer.cpp
+├── L3_2min_timer.h
+├── L3_FSMevent.cpp
+├── L3_FSMevent.h
+├── L3_FSMmain.cpp
+├── L3_FSMmain.h
+├── L3_LLinterface.cpp
+├── L3_LLinterface.h
+├── L3_msg.cpp
+├── L3_msg.h
+├── L3_Quiz.cpp
+├── L3_Quiz.h
+├── L3_role.cpp
+├── L3_role.h
+├── L3_state.h
+├── L3_timer.cpp
+├── L3_timer.h
+
+```
+
+
+
+---
 
 
 ## ✨ 얻은 점
