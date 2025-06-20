@@ -12,7 +12,15 @@ const char* quiz_questions[QUIZ_TOTAL_COUNT] = {
     "2. How old is the Host? (Hint: It's a quarter of a century.)",
     "3. Is Host a student in Sookmyung women's university? (Hint: She's currently enrolled in a women's university in Seoul.)",
     "4. What is 7 * 7?",
-    "5. What’s the host’s favorite season? (Hint: It’s the season of cherry blossoms and new beginnings.)  "
+    "5. What's the host’s favorite season? (Hint: It's the season of cherry blossoms and new beginnings.)  "
+};
+
+const char* quiz_questions_for_user[QUIZ_TOTAL_COUNT] = {
+    "1. What's host's favorite fruit? (Hint: It's yellow and monkeys love it!)",
+    "2. How old is the Host? (Hint: It's a quarter of a century.)",
+    "3. Is Host a student in Sookmyung women's university? (Hint: She's currently enrolled in a women's university in Seoul.)",
+    "4. What is 7 * 7?",
+    "5. What's the host’s favorite season? (Hint: It's the season of cherry blossoms and new beginnings.)  "
 };
 
 //퀴즈 정답 
@@ -76,7 +84,7 @@ QuizSelectResult L3_quiz_select(Serial& pc) {
         }
         if (idx < sizeof(inputBuffer) - 1) {
             inputBuffer[idx++] = c;
-            pc.putc(c);
+            //pc.putc(c);
         }
     }
 
