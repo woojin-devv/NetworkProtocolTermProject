@@ -19,8 +19,8 @@ const char* quiz_questions[QUIZ_TOTAL_COUNT] = {
 const char* quiz_answers[QUIZ_TOTAL_COUNT] = {
     "banana",
     "25",
-    "yes"
-    "49"
+    "yes",
+    "49",
     "spring"
 };
 
